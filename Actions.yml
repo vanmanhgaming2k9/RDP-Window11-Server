@@ -1,0 +1,149 @@
+name: PREMIUM-RDP-PRO-MAX
+
+on:
+  workflow_dispatch:
+    inputs:
+      time:
+        description: "Chọn thời gian chạy RDP"
+        required: true
+        type: choice
+        options:
+          - 1 hour
+          - 3 hours
+          - 5 hours 40 minutes
+          - Unlimited (No Timeout)
+
+jobs:
+  Create-RDP:
+    runs-on: windows-latest
+
+    steps:
+
+      # ====== TÍNH THỜI GIAN ======
+      - name: Set Time Mode
+        id: time
+        run: |
+          if ("${{ github.event.inputs.time }}" -eq "1 hour") { echo "timevalue=60" >> $env:GITHUB_OUTPUT }
+          elseif ("${{ github.event.inputs.time }}" -eq "3 hours") { echo "timevalue=180" >> $env:GITHUB_OUTPUT }
+          elseif ("${{ github.event.inputs.time }}" -eq "5 hours 40 minutes") { echo "timevalue=340" >> $env:GITHUB_OUTPUT }
+          elseif ("${{ github.event.inputs.time }}" -eq "Unlimited (No Timeout)") { echo "timevalue=999999" >> $env:GITHUB_OUTPUT }
+
+      # ====== CẤU HÌNH RDP + ADMIN ======
+      - name: Enable RDP + Create Admin User
+        run: |
+          Write-Host "Bật RDP..."
+
+          Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+          Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-TCP" -Name "UserAuthentication" -Value 0
+
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          New-NetFirewallRule -DisplayName "RDP-IN" -Direction Inbound -LocalPort 3389 -Protocol TCP -Action Allow
+          New-NetFirewallRule -DisplayName "RDP-OUT" -Direction Outbound -LocalPort 3389 -Protocol TCP -Action Allow
+
+          $user = "admin"
+          $pass = "admin@123" | ConvertTo-SecureString -AsPlainText -Force
+
+          if (-not (Get-LocalUser -Name $user -ErrorAction SilentlyContinue)) {
+            New-LocalUser -Name $user -Password $pass
+          }
+
+          Add-LocalGroupMember -Group "Administrators" -Member "admin"
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "admin"
+
+          Start-Service TermService
+
+      # ====== BẬT ÂM THANH ======
+      - name: Enable Windows Audio
+        run: |
+          Set-Service -Name Audiosrv -StartupType Automatic
+          Start-Service Audiosrv
+          Set-Service -Name AudioEndpointBuilder -StartupType Automatic
+          Start-Service AudioEndpointBuilder
+
+      # ====== CÀI GOOGLE CHROME ======
+      - name: Install Chrome
+        run: |
+          Invoke-WebRequest "https://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile chrome.exe
+          Start-Process chrome.exe -ArgumentList "/silent" -Wait
+
+      # ====== CÀI PYTHON ======
+      - name: Install Python
+        run: |
+          Invoke-WebRequest "https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe" -OutFile python.exe
+          Start-Process python.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait
+
+      # ====== CÀI NODE.JS ======
+      - name: Install Node.js
+        run: |
+          Invoke-WebRequest "https://nodejs.org/dist/latest/win-x64/node.exe" -OutFile "C:\Windows\System32\node.exe"
+
+      # ====== CÀI VS CODE ======
+      - name: Install VSCode
+        run: |
+          Invoke-WebRequest "https://update.code.visualstudio.com/latest/win32-x64-user/stable" -OutFile vscode.exe
+          Start-Process vscode.exe -ArgumentList "/silent" -Wait
+
+      # ====== ĐẶT WALLPAPER ======
+      - name: Set Wallpaper
+        run: |
+          $url = "https://wallpapercave.com/wp/wp6324572.jpg"
+          Invoke-WebRequest $url -OutFile "C:\wall.jpg"
+          Set-ItemProperty -path "HKCU:\Control Panel\Desktop" -name wallpaper -value "C:\wall.jpg"
+          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+
+      # ====== TỐI ƯU HỆ THỐNG ======
+      - name: Optimize Windows
+        run: |
+          Stop-Service -Name Spooler -Force
+          Set-Service -Name Spooler -StartupType Disabled
+          Disable-MMAgent -MemoryCompression
+          powercfg -setactive SCHEME_MIN
+
+      # ====== RTX GPU BOOST ======
+      - name: Enable RTX GPU Boost
+        run: |
+          Write-Host "Kích hoạt RTX GPU Boost..."
+
+          # Hardware Accelerated GPU Scheduling
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name HwSchMode -PropertyType DWord -Value 2 -Force
+
+          # GPU Priority
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PriorityControl" -Name "Win32PrioritySeparation" -PropertyType DWord -Value 26 -Force
+
+          # DX Rendering Boost
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Avalon.Graphics" -Name DisableHWAcceleration -Value 0 -Force
+
+          # DirectX Low Latency
+          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\DirectX" -Name MaxFrameLatency -PropertyType DWord -Value 1 -Force
+
+          # WDDM Compute Optimization
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\dxgkrnl" -Name EnablePreemption -PropertyType DWord -Value 1 -Force
+
+          # Unlock GPU Compute
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" -Name GPUCompute -PropertyType DWord -Value 1 -Force
+
+          Write-Host "RTX GPU Boost Enabled!"
+
+      # ====== HIỆN THÔNG TIN RDP ======
+      - name: Show RDP Info
+        run: |
+          $ip = (Invoke-WebRequest -Uri "https://api.ipify.org").Content
+          Write-Host "=============================="
+          Write-Host "      RDP PRO MAX READY"
+          Write-Host "=============================="
+          Write-Host "IP Address : $ip"
+          Write-Host "Username   : admin"
+          Write-Host "Password   : admin@123"
+          Write-Host "=============================="
+
+      # ====== GIỮ VPS HOẠT ĐỘNG ======
+      - name: Keep Alive
+        run: |
+          $t = ${{ steps.time.outputs.timevalue }}
+          if ($t -ge 999999) {
+            while ($true) { Start-Sleep -Seconds 30 }
+          } else {
+            Start-Sleep -Seconds ($t * 60)
+          }
+          Write-Host "Time is up! Shutting down..."
+          Stop-Computer -Force
