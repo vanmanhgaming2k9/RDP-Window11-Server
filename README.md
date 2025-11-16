@@ -79,6 +79,8 @@ Không được phép sao chép, phân phối hoặc sử dụng thương mại 
 🔗 Kết nối với tôi trên mạng xã hội:  
 - Facebook: [https://www.facebook.com/Bong.Toi.11022010/](https://www.facebook.com/Bong.Toi.11022010/)  
 - YouTube: [youtube.com/@vanmanhgaming](https://youtube.com/@vanmanhgaming)  
-
+- Discord: [https://discord.com/users/1118923892732477691
+](https://discord.com/users/1118923892732477691
+)
 Cảm ơn bạn đã sử dụng **Windows VPS Auto Pro Max – 90 Days Edition**! 🚀
 
