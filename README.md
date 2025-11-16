@@ -71,8 +71,14 @@ Phiên bản này **cố định**:
 
 ---
 
-# 🛠 Hướng dẫn sử dụng
+# © Bản quyền & Liên hệ
 
-## 1️⃣ Tạo repository GitHub
-Truy cập:
+© 2025 vanmanhgaming. Mọi quyền được bảo lưu.  
+Không được phép sao chép, phân phối hoặc sử dụng thương mại mà không có sự cho phép của tác giả.
+
+🔗 Kết nối với tôi trên mạng xã hội:  
+- Facebook: [https://www.facebook.com/Bong.Toi.11022010/](https://www.facebook.com/Bong.Toi.11022010/)  
+- YouTube: [youtube.com/@vanmanhgaming](https://youtube.com/@vanmanhgaming)  
+
+Cảm ơn bạn đã sử dụng **Windows VPS Auto Pro Max – 90 Days Edition**! 🚀
 
