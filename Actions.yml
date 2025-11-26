@@ -315,8 +315,8 @@ jobs:
                 }
             }
             Start-Job -ScriptBlock $monitorScript -Name "SystemMonitor"
-            # Kiểm tra 24/7 chỉ khi TOTAL_MINUTES >= 129600
-            $infiniteRun = $totalMinutes -ge 129600
+            # Kiểm tra 24/7 chỉ khi TOTAL_MINUTES >= 43200
+            $infiniteRun = $totalMinutes -ge 43200
             do {
                 $currentTime = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $timeZone)
                 $timeLeft = $endTime - $currentTime
