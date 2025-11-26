@@ -30,7 +30,11 @@ sudo useradd -m runner
 # 5. Chuyển quyền sở hữu
 sudo chown -R runner:runner /opt/actions-runner
 
-# 6. Cấu hình runner với URL repo và token
+# 6. Lấy token từ GitHub và cấu hình runner
+# Truy cập repo GitHub -> Settings -> Actions -> Runners -> Add runner
+# Chọn Linux, GitHub sẽ hiển thị token dùng 1 lần
+# Ví dụ:
+# ./config.sh --url https://github.com/<username>/<repo> --token <TOKEN_CỦA_BẠN>
 sudo -u runner /opt/actions-runner/config.sh --url https://github.com/vamnhcorder8/VPS --token B2KR5SVNDV67SF7WLVM46N3JE2OAY
 
 # 7. Tạo systemd service chạy 24/7
@@ -173,7 +177,7 @@ sudo systemctl restart rdp_24_7.service
 * **GitHub Actions Runner**: chạy workflow liên tục trên VPS Linux.
 * **RDP 24/7 script**: giữ xrdp luôn bật, hiển thị thời gian còn lại, tự dừng sau 90 ngày.
 * **Systemd service**: restart tự động nếu script crash.
-* Hạn chế: Runner chỉ chạy workflow, script chỉ giữ RDP trên Linux VPS, không tạo GUI Windows VPS.
+* **Hạn chế**: Runner chỉ chạy workflow, script chỉ giữ RDP trên Linux VPS, không tạo GUI Windows VPS.
 
 ---
 
