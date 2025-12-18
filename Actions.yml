@@ -21,9 +21,6 @@ on:
           - '5_Giờ_(300m)'
           - '5_Giờ_30_Phút_(330m)'
           - '6_Giờ_(360m)'
-          - '30_Ngày_(43200m)'
-          - '60_Ngày_(86400m)'
-          - '90_Ngày_(129600m)'
 
 jobs:
   Vanmanhgaming-RDP-Setup:
@@ -259,9 +256,6 @@ jobs:
               "5_Giờ_(300m)"               { $totalMinutes = 300; $displayTime = "5 giờ" }
               "5_Giờ_30_Phút_(330m)"       { $totalMinutes = 330; $displayTime = "5 giờ 30 phút" }
               "6_Giờ_(360m)"               { $totalMinutes = 360; $displayTime = "6 giờ" }
-              "30_Ngày_(43200m)"           { $totalMinutes = 43200; $displayTime = "30 ngày" }
-              "60_Ngày_(86400m)"           { $totalMinutes = 86400; $displayTime = "60 ngày" }
-              "90_Ngày_(129600m)" { $totalMinutes = 129600; $displayTime = "90 ngày" }
           }
           
           # Tính thời gian chính xác
