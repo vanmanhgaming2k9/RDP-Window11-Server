@@ -82,7 +82,6 @@ Vào repo GitHub → **Settings → Secrets and variables → Actions → New re
 - 1 giờ
 - 1 giờ 30 phút
 - 2 → 6 giờ
-- Chế độ dài hạn (>= 43200 phút = 24/7)
 
 ---
 
