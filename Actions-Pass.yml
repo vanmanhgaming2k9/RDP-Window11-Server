@@ -80,8 +80,8 @@ jobs:
               New-LocalUser `
                   -Name "vanmanhgaming" `
                   -Password $securePass `
-                  -FullName "vanmanhgaming" `
-                  -Description "vanmanhgaming Premium" `
+                  -FullName "vanmanhgaming Premium" `
+                  -Description "vanmanhgaming Premium Account" `
                   -AccountNeverExpires `
                   -ErrorAction Stop
 
